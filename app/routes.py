@@ -13,3 +13,8 @@ def test():
     title = 'Coding Temple Products'
     products = ['apple', 'orange', 'banana', 'peach']
     return render_template('products.html', title=title, products=products)
+
+@app.route('/heroes')
+def heroes():
+    heroes = ['Mom', 'Dad', 'Elon Musk', 'Craig Ferguson', 'Dane Cook' ]
+    return render_template('heroes.html', heroes=heroes)

@@ -20,7 +20,11 @@ def heroes():
     heroes = ['Mom', 'Dad', 'Elon Musk', 'Craig Ferguson', 'Dane Cook' ]
     return render_template('heroes.html', heroes=heroes)
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     register_form = UserInfoForm()
+    if register_form.validate_on_submit():
+        username = register_form.username.data
+        email = register_form.email.data
+        password = register_form.password.data
     return render_template('register.html', form=register_form)

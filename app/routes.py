@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template
-from app.forms import UserInfoForm, PostForm
-from app.models import User, Post
+from app.forms import PhoneBookForm, UserInfoForm, PostForm
+from app.models import Contact, User, Post
 from app import db
 
 @app.route('/')
@@ -41,6 +41,19 @@ def createpost():
         title = form.title.data
         content = form.content.data
         new_post = Post(title, content, user_id)
-        db.session.add(post)
+        db.session.add(new_post)
         db.session.commit()
     return render_template('createpost.html', form=form)
+
+@app.route('/phonebook', methods=['GET', 'POST'])
+def add_contact():
+    form = PhoneBookForm()
+    if form.validate_on_submit():
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        address = form.address.data
+        phone_number = form.phone_number.data
+        new_contact = Contact(first_name, last_name, address, phone_number)
+        db.session.add(new_contact)
+        db.session.commit()
+    return render_template('phonebook.html', form=form)

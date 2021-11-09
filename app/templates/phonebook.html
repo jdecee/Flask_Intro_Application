@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class='text-center'>Welcome to your Phonebook!</h1>
+<h3>Add contact:</h3>
+<div class="container">
+    <form action="" autocomplete="off" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <fieldset>
+                {{ form.first_name.label }}
+                {{ form.first_name(class='form-control', placeholder='First Name') }}
+            </fieldset>
+            <fieldset>
+                {{ form.last_name.label }}
+                {{ form.last_name(class='form-control', placeholder='Last Name') }}
+            </fieldset>
+            <fieldset>
+                {{ form.address.label }}
+                {{ form.address(class='form-control', placeholder='Address') }}
+            </fieldset>
+            <fieldset>
+                {{ form.phone_number.label }}
+                {{ form.phone_number(class='form-control', placeholder='Phone Number') }}
+            </fieldset>
+        </div>
+        {{ form.submit(class='btn btn-success') }}
+    </form>
+</div>
+
+{% endblock content %}

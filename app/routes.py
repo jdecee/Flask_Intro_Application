@@ -38,9 +38,10 @@ def register():
 def createpost():
     form = PostForm()
     if form.validate_on_submit():
+        print('Hello')
         title = form.title.data
         content = form.content.data
-        new_post = Post(title, content, user_id)
+        new_post = Post(title, content, user_id=1)
         db.session.add(new_post)
         db.session.commit()
     return render_template('createpost.html', form=form)

@@ -1,15 +1,15 @@
-from app import app
+from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import PhoneBookForm, UserInfoForm, PostForm
+from flask_login import login_user
+from app.forms import LoginForm, PhoneBookForm, UserInfoForm, PostForm
 from app.models import Contact, User, Post
-from app import db
+
 
 @app.route('/')
 def index():
     name = 'Jon'
     title = 'Coding Temple Class'
     return render_template('index.html', name_of_user=name, title=title)
-
 
 @app.route('/products')
 def products():
@@ -29,6 +29,11 @@ def register():
         username = register_form.username.data
         email = register_form.email.data
         password = register_form.password.data
+
+        existing_user = User.query.filter_by(username=username).all()
+        if existing_user:
+            flash(f'{username} is already in use. Please register with a new username', 'danger')
+            return redirect(url_for('register'))
         
         new_user = User(username, email, password)
         
@@ -40,6 +45,25 @@ def register():
         return redirect(url_for('index'))
 
     return render_template('register.html', form=register_form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        user = User.query.filter_by(username=username).first()
+
+        if user is None or not user.check_password(password):
+            flash(f'Your username or password is incorrect', 'danger')
+            return redirect(url_for('login'))
+
+        login_user(user)
+        flash(f'You have successfully logged in!', 'success')
+        return redirect(url_for('index'))    
+
+    return render_template('login.html', form=form)    
 
 @app.route('/createpost', methods=['GET', 'POST'])
 def createpost():

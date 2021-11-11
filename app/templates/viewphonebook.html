@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+​
+{% block content %}
+​
+{% if current_user.is_authenticated %}
+    <h4>Welcome to your contacts, {{ current_user.username }}</h4>
+{% else %}
+    <h4>Welcome, please register up above to create your own posts!</h4>
+{% endif %}
+
+{% for c in contacts %}
+    <div class='text-center'>
+        <div class="card">
+            <div class="card-header">
+                <b>{{c.last_name}}, {{c.first_name}}</b>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">{{c.address}}</li>
+              <li class="list-group-item">{{c.phone_number}}</li>
+            </ul>
+          </div>
+    </div>
+{% endfor %}
+​
+{% endblock %}

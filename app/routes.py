@@ -8,7 +8,8 @@ from app.models import Contact, User, Post
 @app.route('/')
 def index():
     title = 'Coding Temple Class'
-    return render_template('index.html', title=title)
+    posts = Post.query.all()
+    return render_template('index.html', title=title, posts=posts)
 
 @app.route('/products')
 def products():
@@ -80,17 +81,32 @@ def createpost():
         new_post = Post(title, content, current_user.id)
         db.session.add(new_post)
         db.session.commit()
+
+        flash(f'The post {title} has been created.', 'success')
+        return redirect(url_for('index'))
     return render_template('createpost.html', form=form)
 
 @app.route('/phonebook', methods=['GET', 'POST'])
+@login_required
 def add_contact():
     form = PhoneBookForm()
     if form.validate_on_submit():
         first_name = form.first_name.data
         last_name = form.last_name.data
+        full_name = first_name + " " + last_name
         address = form.address.data
         phone_number = form.phone_number.data
+        
+
         new_contact = Contact(first_name, last_name, address, phone_number)
         db.session.add(new_contact)
         db.session.commit()
+        flash(f'{full_name} has been added to your phonebook.', 'success')
+        return redirect(url_for('viewphonebook'))
     return render_template('phonebook.html', form=form)
+
+@app.route('/viewphonebook')
+@login_required
+def viewphonebook():
+    contacts = Contact.query.all()
+    return render_template('viewphonebook.html', contacts=contacts)

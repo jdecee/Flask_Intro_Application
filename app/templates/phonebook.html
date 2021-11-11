@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class='text-center'>Welcome to your Phonebook!</h1>
 <h3>Add contact:</h3>
 <div class="container">
     <form action="" autocomplete="off" method="post">
@@ -26,6 +25,8 @@
         </div>
         {{ form.submit(class='btn btn-success') }}
     </form>
+    <br>
+    <a href="/viewphonebook" class="button">View PhoneBook</a>
 </div>
 
 {% endblock content %}

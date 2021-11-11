@@ -1,15 +1,14 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from flask_login import login_user
+from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm, PhoneBookForm, UserInfoForm, PostForm
 from app.models import Contact, User, Post
 
 
 @app.route('/')
 def index():
-    name = 'Jon'
     title = 'Coding Temple Class'
-    return render_template('index.html', name_of_user=name, title=title)
+    return render_template('index.html', title=title)
 
 @app.route('/products')
 def products():
@@ -63,15 +62,22 @@ def login():
         flash(f'You have successfully logged in!', 'success')
         return redirect(url_for('index'))    
 
-    return render_template('login.html', form=form)    
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash(f'You have successfully logged out!', 'success')
+    return redirect(url_for('index'))        
 
 @app.route('/createpost', methods=['GET', 'POST'])
+@login_required
 def createpost():
     form = PostForm()
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
-        new_post = Post(title, content, user_id=1)
+        new_post = Post(title, content, current_user.id)
         db.session.add(new_post)
         db.session.commit()
     return render_template('createpost.html', form=form)

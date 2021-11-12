@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h4 class='text-center'>Welcome to your profile page {{ current_user.username }}!</h4>
+
+<div class='mx-5 mt-5'>
+    <div class="card bg-dark text-white">
+        <div class="card-header text-center">
+          <b>Account Info</b>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Username: {{ current_user.username }}</li>
+          <li class="list-group-item">Email: {{ current_user.email }}</li>
+        </ul>
+      </div>
+</div>
+
+
+
+{% endblock %}

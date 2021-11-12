@@ -1,3 +1,4 @@
+from re import template
 from app import app, db, mail
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
@@ -31,9 +32,9 @@ def register():
         email = register_form.email.data
         password = register_form.password.data
 
-        existing_user = User.query.filter_by(username=username).all()
+        existing_user = User.query.filter((User.username==username)|(User.email==email)).all()
         if existing_user:
-            flash(f'{username} is already in use. Please register with a new username', 'danger')
+            flash(f'{username} or {email} is already in use. Please register with a new username or email', 'danger')
             return redirect(url_for('register'))
         
         new_user = User(username, email, password)
@@ -115,3 +116,55 @@ def add_contact():
 def viewphonebook():
     contacts = Contact.query.all()
     return render_template('viewphonebook.html', contacts=contacts)
+
+@app.route('/my-account')
+@login_required
+def my_account():
+    return render_template('my_account.html')
+
+@app.route('/my-posts')
+@login_required
+def my_posts():
+    posts = current_user.posts
+    return render_template('my_posts.html', posts=posts)
+
+
+@app.route('/posts/<int:post_id>')
+def post_detail(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('post_detail.html', post=post)
+
+@app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])
+@login_required
+def post_edit(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author.id != current_user.id:
+        return redirect(url_for('my_posts'))
+    
+    form = PostForm()
+    if form.validate_on_submit():
+        new_title = form.title.data
+        new_content = form.content.data
+        # where are the title and the content coming from?
+        post.title = new_title
+        post.content = new_content
+        db.session.commit()
+
+        flash(f'Post has been updated')
+        return redirect(url_for('post_detail', post_id=post.id))
+
+    return render_template('post_edit.html', post=post, form=form)
+
+@app.route('/posts/<int:post_id>/delete', methods=['POST'])
+@login_required
+def post_delete(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        flash('You can only delete your own posts', 'danger')
+        return redirect(url_for('my_posts'))
+    
+    db.session.delete(post)
+    db.session.commit()
+
+    flash('Post has been deleted', 'success')
+    return redirect(url_for('my_posts'))

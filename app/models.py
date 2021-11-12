@@ -44,7 +44,7 @@ class Contact(db.Model):
     date_created = db.Column(db.Integer, nullable=False, default=datetime.utcnow)
 
     def __init__(self, first, last, address, number):
-        self.first= first
-        self.last = last
+        self.first_name = first
+        self.last_name = last
         self.address = address
-        self.number = number
+        self.phone_number = number

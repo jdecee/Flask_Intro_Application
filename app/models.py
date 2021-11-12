@@ -14,6 +14,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(256), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+    contacts = db.relationship('Contact', backref='creator', lazy=True)
+
 
     def __init__(self, username, email, password):
         self.username = username
@@ -42,9 +44,11 @@ class Contact(db.Model):
     address = db.Column(db.String(500))
     phone_number = db.Column(db.Integer)
     date_created = db.Column(db.Integer, nullable=False, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __init__(self, first, last, address, number):
+    def __init__(self, first, last, address, number, user_id):
         self.first_name = first
         self.last_name = last
         self.address = address
         self.phone_number = number
+        self.user_id = user_id

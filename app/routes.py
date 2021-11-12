@@ -104,10 +104,10 @@ def add_contact():
         phone_number = form.phone_number.data
         
 
-        new_contact = Contact(first_name, last_name, address, phone_number)
+        new_contact = Contact(first_name, last_name, address, phone_number, current_user.id)
         db.session.add(new_contact)
         db.session.commit()
-        flash(f'{full_name} has been added to your phonebook.', 'success')
+        flash(f'{full_name} has been added to the book.', 'success')
         return redirect(url_for('viewphonebook'))
     return render_template('phonebook.html', form=form)
 
@@ -128,6 +128,17 @@ def my_posts():
     posts = current_user.posts
     return render_template('my_posts.html', posts=posts)
 
+@app.route('/my-contacts')
+@login_required
+def my_contacts():
+    contacts = current_user.contacts
+    return render_template('my_contacts.html', contacts=contacts)
+
+
+@app.route('/contacts/<int:contact_id>')
+def contact_detail(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
+    return render_template('contact_detail.html', contact=contact)
 
 @app.route('/posts/<int:post_id>')
 def post_detail(post_id):

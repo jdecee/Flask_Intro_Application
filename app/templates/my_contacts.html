@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>My Contacts:</h1>
+
+{% for c in contacts %}
+    <div class='text-center'>
+        <div class="card">
+            <div class="card-header">
+                <b>{{c.last_name}}, {{c.first_name}}</b>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">{{c.address}}</li>
+              <li class="list-group-item">{{c.phone_number}}</li>
+              <li class="list-group-item">Created by: {{c.creator.username}}</li>
+            </ul>
+            <a href="" class="btn btn-success">Edit/Delete</a>
+          </div>    
+    </div>
+{% endfor %}
+
+
+
+{% endblock %}

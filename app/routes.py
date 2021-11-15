@@ -140,6 +140,45 @@ def contact_detail(contact_id):
     contact = Contact.query.get_or_404(contact_id)
     return render_template('contact_detail.html', contact=contact)
 
+@app.route('/contacts/<int:contact_id>/edit', methods=['GET', 'POST'])    
+@login_required
+def contact_edit(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
+    if contact.creator.id != current_user.id:
+        return redirect(url_for('my_contacts'))
+
+    form = PhoneBookForm()
+    if form.validate_on_submit():
+        new_first_name = form.first_name.data
+        new_last_name = form.last_name.data
+        new_address = form.address.data
+        new_phone_number = form.phone_number.data
+        contact.first_name = new_first_name
+        contact.last_name = new_last_name
+        contact.address = new_address
+        contact.phone_number = new_phone_number
+
+        db.session.commit() 
+
+        flash(f'Contact has been updated')
+        return redirect(url_for('contact_detail', contact_id=contact.id))
+
+    return render_template('contact_edit.html', contact=contact, form=form)
+
+@app.route('/contacts/<int:contact_id>/delete', methods=['GET','POST'])
+@login_required
+def delete_contact(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
+    if contact.creator != current_user:
+        flash('You can only delete your own posts', 'danger')
+        return redirect(url_for('my_contacts'))
+    
+    db.session.delete(contact)
+    db.session.commit()
+
+    flash('Contact removed from phonebook', 'success')
+    return redirect(url_for('my_contacts'))
+
 @app.route('/posts/<int:post_id>')
 def post_detail(post_id):
     post = Post.query.get_or_404(post_id)
@@ -156,7 +195,6 @@ def post_edit(post_id):
     if form.validate_on_submit():
         new_title = form.title.data
         new_content = form.content.data
-        # where are the title and the content coming from?
         post.title = new_title
         post.content = new_content
         db.session.commit()

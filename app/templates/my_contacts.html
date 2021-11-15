@@ -15,7 +15,7 @@
               <li class="list-group-item">{{c.phone_number}}</li>
               <li class="list-group-item">Created by: {{c.creator.username}}</li>
             </ul>
-            <a href="" class="btn btn-success">Edit/Delete</a>
+            <a href="{{url_for('contact_detail', contact_id=c.id)}}" class="btn btn-success">Edit/Delete</a>
           </div>    
     </div>
 {% endfor %}

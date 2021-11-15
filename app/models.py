@@ -52,3 +52,22 @@ class Contact(db.Model):
         self.address = address
         self.phone_number = number
         self.user_id = user_id
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    price = db.Column(db.Numeric(10,2), nullable=False)
+    stock = db.Column(db.Integer, nullable=False)
+    colors = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    image = db.Column(db.String(150), nullable=False, default='image.jpg')
+
+    def __init__(self, name, price, stock, colors, description, image):
+        self.name = name
+        self.price = price
+        self.price = price
+        self.stock = stock
+        self.colors = colors
+        self.description = description
+        self.image = image

@@ -1,11 +1,38 @@
-from re import template
-from app import app, db, mail
-from flask import render_template, redirect, url_for, flash
+from app import app, db, mail, photos
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_mail import Message
-from app.forms import LoginForm, PhoneBookForm, UserInfoForm, PostForm
-from app.models import Contact, User, Post
+from app.forms import LoginForm, PhoneBookForm, UserInfoForm, PostForm, AddProduct
+from app.models import Contact, User, Post, Product
+import secrets
 
+@app.route('/merch')
+def merch():
+    return render_template('merch.html')
+
+@app.route('/admin', methods=['GET','POST'])
+def admin():
+    form = AddProduct()
+    if request.method == 'POST':
+        name = form.name.data
+        price = form.price.data
+        stock = form.stock.data
+        colors = form.colors.data
+        description = form.description.data
+        image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + ".")
+        new_product = Product(name, price, stock, colors, description, image)
+
+        db.session.add(new_product)
+        db.session.commit()
+
+        flash(f'{name} has been added', 'success')
+
+    return render_template('admin.html', form=form)
+
+
+
+
+#Classwork    
 
 @app.route('/')
 def index():
@@ -217,3 +244,4 @@ def post_delete(post_id):
 
     flash('Post has been deleted', 'success')
     return redirect(url_for('my_posts'))
+

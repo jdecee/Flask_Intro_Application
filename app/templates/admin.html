@@ -36,4 +36,36 @@
     </form>
 </div>
 
+    <div class='container pt-5'>
+        <table class="table table-sm table-bordered">
+            <thead>
+                <th>Serial Number</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </thead>
+        <tbody>
+            {% for p in products %}
+            <tr>
+                <td>{{p.id}}</td>
+                <td>{{p.name}}</td>
+                <td>{{p.price}}</td>
+                <td><img src="{{url_for('static', filename='images' + p.image)}}"></td>
+                <td><a href="{{url_for('updateproduct', product_id=p.id)}}" class="btn btn-secondary">Edit</td>
+                <td><a href="{{ url_for('deleteproduct', product_id=p.id) }}" method="post" class="btn btn-danger mt-1">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+
+
+
+
+
+
+
 {% endblock content %}

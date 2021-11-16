@@ -4,5 +4,25 @@
 
 <h1>Merch</h1>
 
+<div class="container">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-3 mt-5">
+            <div class="card">
+                <img src="{{url_for('static', filename='images/' + product.image)}}" alt="{{product.name}}">
+                <div class="card-body">
+                    <h5 class='text-center'>{{product.name}}</h5>
+                    <p class='text-center'>${{product.price}}</p>
+                </div>
+                <div class="footer">
+                    <a href="#" class="float-left btn btn-sm btn-primary">details</a>
+                    <a href="#" class="float-right btn btn-sm btn-warning">Add to cart</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 
 {% endblock %}

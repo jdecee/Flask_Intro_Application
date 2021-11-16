@@ -8,11 +8,13 @@ import secrets
 
 @app.route('/merch')
 def merch():
-    return render_template('merch.html')
+    products = Product.query.filter(Product.stock > 0)
+    return render_template('merch.html', products=products)
 
 @app.route('/admin', methods=['GET','POST'])
 def admin():
     form = AddProduct()
+    products = Product.query.all()
     if request.method == 'POST':
         name = form.name.data
         price = form.price.data
@@ -26,9 +28,42 @@ def admin():
         db.session.commit()
 
         flash(f'{name} has been added', 'success')
+    return render_template('admin.html', form=form, products=products)
 
-    return render_template('admin.html', form=form)
+@app.route('/updateproduct/<int:product_id>', methods=['GET', 'POST'])
+def updateproduct(product_id):
+    product = Product.query.get_or_404(product_id)
+    form = AddProduct()
 
+    if form.validate_on_submit():
+        new_name = form.name.data
+        new_price = form.price.data
+        new_stock = form.stock.data
+        new_colors = form.colors.data
+        new_description = form.description.data
+        new_image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + ".")
+
+        product.name = new_name
+        product.price = new_price
+        product.stock = new_stock
+        product.colors = new_colors
+        product.description = new_description
+        product.image = new_image
+
+        db.session.commit() 
+        flash(f'Product has been updated')
+        return redirect(url_for('admin'))
+    return render_template('updateproduct.html', product=product, form=form)
+
+@app.route('/deleteproduct/<int:product_id>/', methods=['GET', 'POST'])
+def deleteproduct(product_id):
+    product = Product.query.get_or_404(product_id)
+    
+    db.session.delete(product)
+    db.session.commit()
+
+    flash('Product has been deleted', 'success')
+    return redirect(url_for('admin'))
 
 
 

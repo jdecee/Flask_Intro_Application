@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 class='text-center'>Admin Utilities</h3>
+<h3>Edit Merch:</h3>
+<div class="container">
+    <form action="" autocomplete="off" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <fieldset>
+                {{ form.name.label }}
+                {{ form.name(class='form-control', value=product.name) }}
+            </fieldset>
+            <fieldset>
+                {{ form.price.label }}
+                {{ form.price(class='form-control', value=product.price) }}
+            </fieldset>
+            <fieldset>
+                {{ form.stock.label }}
+                {{ form.stock(class='form-control', value=product.stock) }}
+            </fieldset>
+            <fieldset>
+                {{ form.description.label }}
+                {{ form.description(class='form-control', value=product.description) }}
+            </fieldset>
+            <fieldset>
+                {{ form.colors.label }}
+                {{ form.colors(class='form-control', value=product.colors) }}
+            </fieldset>
+            <fieldset>
+                {{ form.image.label }}
+                {{ form.image(class='form-control', placeholder='Image') }}
+            </fieldset>
+        </div>
+        {{ form.submit(class='btn btn-success') }}
+        <a href="{{url_for('admin')}}" class='btn btn-close'></a>
+    </form>
+</div>
+
+
+
+
+
+
+{% endblock content %}

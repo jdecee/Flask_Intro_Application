@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if current_user.is_authenticated %}
+<h1 class='text-center'>Welcome to My Videos <i>{{current_user.username}}</i>. I Hope you Enjoy!</h1>
+<h3 class='text-center'>Comment Below after Watching!</h3>
+{% else %}
+<h4 class='text-center mt-3'>Welcome, please register to add a post :)</h4>
+{% endif %}
+
+
+<div class='text-center'>
+    <iframe class='mt-5' width="560" height="315" src="https://www.youtube.com/embed/jBcouEN9quI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    {% if current_user.is_authenticated %}
+    <h6><a href="{{url_for('createpost')}}">Add a Post</a></h6>
+    {% endif %}
+</div>
+​
+{% for p in posts %}
+    <div class="card bg-primary text-dark">
+        <div class="card-header">
+        {{ p.title }}
+        </div>
+        <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <p>{{ p.content }}</p>
+            <footer class="blockquote-footer text-dark">{{ p.author.username }} on {{p.date_created}}<cite title="Source Title"></cite></footer>
+        </blockquote>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

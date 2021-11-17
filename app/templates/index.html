@@ -1,25 +1,30 @@
-{% extends 'base.html' %}
-​
+{% extends 'base.html'%} 
+
 {% block content %}
-​
-{% if current_user.is_authenticated %}
-    <h4>Welcome {{ current_user.username }}</h4>
-{% else %}
-    <h4>Welcome, please register up above to create your own posts!</h4>
-{% endif %}
-​
-{% for p in posts %}
-    <div class="card bg-primary text-dark">
-        <div class="card-header">
-        {{ p.title }}
-        </div>
-        <div class="card-body">
-        <blockquote class="blockquote mb-0">
-            <p>{{ p.content }}</p>
-            <footer class="blockquote-footer text-dark">{{ p.author.username }} on <cite title="Source Title"></cite></footer>
-        </blockquote>
+    <div class='container mt-5 text-center'>
+        <h2>Hi, I'm Jon Dicianni.</h2>
+        <h5>Professional Comedian.
+        <br>Designs are modern and minimalistic.
+        <br>Main source of fuel is Laughter. 
+        </h5> 
+    </div>
+    <div class='mt-5 text-center'>
+        <h6>Enjoy!</h6>
+        <a href="/videos" class="btn btn-lg btn-primary">Go to videos</a>
+    </div>  
+    <div>
+        <div class="container text-center" style="margin-top: 300px">
+            <div class="row">
+                <div class="col-3-md">
+                    <form id="contact" action="">
+                        <input type="text" placeholder="First Name">
+                        <input type="text" placeholder="Last Name">
+                        <input type="text" placeholder="Email Address">
+                        <button>✉️</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-{% endfor %}
-​
+
 {% endblock %}

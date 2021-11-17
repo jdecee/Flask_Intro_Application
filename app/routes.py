@@ -6,6 +6,9 @@ from app.forms import LoginForm, PhoneBookForm, UserInfoForm, PostForm, AddProdu
 from app.models import Contact, User, Post, Product
 import secrets
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/admin', methods=['GET','POST'])
 def admin():
@@ -24,7 +27,7 @@ def admin():
         db.session.commit()
 
         flash(f'{name} has been added', 'success')
-    return render_template('admin.html', form=form, products=products)
+    return render_template('admin.html', form=form, products=products, title='admin')
 
 @app.route('/updateproduct/<int:product_id>', methods=['GET', 'POST'])
 def updateproduct(product_id):
@@ -60,10 +63,11 @@ def deleteproduct(product_id):
 
     flash('Product has been deleted', 'success')
     return redirect(url_for('admin'))
+
 @app.route('/merch')
 def merch():
     products = Product.query.filter(Product.stock > 0)
-    return render_template('merch.html', products=products)
+    return render_template('merch.html', title='merch', products=products)
 
 def MergeDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):
@@ -85,7 +89,7 @@ def AddCart():
             if 'Shoppingcart' in session:
                 print(session['Shoppingcart'])
                 if product_id in session['Shoppingcart']:
-                    flash("This product in your cart already")
+                    flash("This product is in your cart already :)", 'info')
                 else:
                     session['Shoppingcart'] = MergeDicts(session['Shoppingcart'], DictItems)
                     return redirect(request.referrer)    
@@ -150,15 +154,14 @@ def clearcart():
 #     except Exception as e:
 #         print(e)
 
+@app.route('/videos')
+def videos():
+    posts = Post.query.all()
+    return render_template('videos.html', posts=posts)
 
 
 #Classwork    
 
-@app.route('/')
-def index():
-    title = 'Coding Temple Class'
-    posts = Post.query.all()
-    return render_template('index.html', title=title, posts=posts)
 
 @app.route('/products')
 def products():
@@ -236,7 +239,7 @@ def createpost():
         db.session.commit()
 
         flash(f'The post {title} has been created.', 'success')
-        return redirect(url_for('index'))
+        return redirect(url_for('videos'))
     return render_template('createpost.html', form=form)
 
 @app.route('/phonebook', methods=['GET', 'POST'])

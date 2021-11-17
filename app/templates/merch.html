@@ -9,14 +9,26 @@
         {% for product in products %}
         <div class="col-md-3 mt-5">
             <div class="card">
-                <img src="{{url_for('static', filename='images/' + product.image)}}" alt="{{product.name}}">
+                <img src="" alt="{{product.name}}">
                 <div class="card-body">
                     <h5 class='text-center'>{{product.name}}</h5>
                     <p class='text-center'>${{product.price}}</p>
                 </div>
                 <div class="footer">
-                    <a href="#" class="float-left btn btn-sm btn-primary">details</a>
-                    <a href="#" class="float-right btn btn-sm btn-warning">Add to cart</a>
+                    <form action="{{url_for('AddCart')}}" method="post">
+                        <input type="hidden" name='product_id' value={{product.id}}>
+                        {% if current_user.is_authenticated %}
+                        <button type="submit" class="btn btn-sm btn-warning">Add to Cart</button>
+                        {% endif %}
+                        <input type="hidden" name='quantity' id="" value="1" min="1" max="{{ product.stock }}">
+                        {% set colors = product.colors.split(',') %}
+                        <select name="colors" id="colors" style="visibility: hidden;">
+                            {% for color in colors %}
+                            {% set col = color.split(':') %}
+                            <option value="{{col[0]}}">{{col[0]|capitalize}}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
                 </div>
             </div>
         </div>

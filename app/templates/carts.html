@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+                <th>Serial Number</th>
+                <th>Name</th>
+                <th>Color</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th class="text-center">Subtotal</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                {% for key, product in session['Shoppingcart'].items() %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{product.name}}</td>
+                    <form action="" method="post">
+                    <td>
+                        {% set colors = product.colors.split(',') %}
+                        <select name="colors" id="colors">
+                            <option value="{{product.color}}">{{product.color}}</option>
+                            {% for color in colors %}
+                            {% set col = color.split(':') %}
+                            <option value="{{col[0]}}">{{col[0]|capitalize}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>${{product.price}}</td>
+                    <td><input type="number" name="quantity" min="1" max="10" value="{{product.quantity}}"> </td>
+                    {% set subtotal = product.quantity|int * product.price %}
+                    <td class='text-center'>${{ subtotal }}</td>
+                    <td><button type='submit' class='btn btn-sm btn-info'>Update</a></td>
+                </form>
+                    <td><a class='btn btn-sm btn-danger' href="{{url_for('deleteitem', id=key)}}">Remove</ class='btn btn-sm btn-info'></td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td><a class='btn btn-primary' href="/merch">Buy More Merch</a></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Grand Total: </b>${{grandtotal}}</td>
+                    <td></td>
+                    <td><a class="btn btn-danger" href="{{url_for('clearcart')}}">Clear Cart</a></td>
+                    <td><a class="btn btn-success" href="">Check Out</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,15 +1,11 @@
 from app import app, db, mail, photos
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_mail import Message
 from app.forms import LoginForm, PhoneBookForm, UserInfoForm, PostForm, AddProduct
 from app.models import Contact, User, Post, Product
 import secrets
 
-@app.route('/merch')
-def merch():
-    products = Product.query.filter(Product.stock > 0)
-    return render_template('merch.html', products=products)
 
 @app.route('/admin', methods=['GET','POST'])
 def admin():
@@ -64,6 +60,95 @@ def deleteproduct(product_id):
 
     flash('Product has been deleted', 'success')
     return redirect(url_for('admin'))
+@app.route('/merch')
+def merch():
+    products = Product.query.filter(Product.stock > 0)
+    return render_template('merch.html', products=products)
+
+def MergeDicts(dict1, dict2):
+    if isinstance(dict1, list) and isinstance(dict2, list):
+        return dict1 + dict2
+    elif isinstance(dict1, dict) and isinstance(dict2,dict):
+        return dict(list(dict1.items()) + list(dict2.items()) )    
+    return False
+
+@app.route('/addcart', methods=['POST'])
+def AddCart():
+    try:
+        product_id = request.form.get('product_id')
+        quantity = request.form.get('quantity')
+        colors = request.form.get('colors')
+        product = Product.query.filter_by(id=product_id).first()
+        if product_id and quantity and colors and request.method == "POST":
+            DictItems = {product_id: {'name':product.name, 'price':product.price, 'color': colors, "quantity": quantity, 'image':product.image, 'colors':product.colors}}
+            
+            if 'Shoppingcart' in session:
+                print(session['Shoppingcart'])
+                if product_id in session['Shoppingcart']:
+                    flash("This product in your cart already")
+                else:
+                    session['Shoppingcart'] = MergeDicts(session['Shoppingcart'], DictItems)
+                    return redirect(request.referrer)    
+            else:
+                session['Shoppingcart'] = DictItems
+                return redirect(request.referrer)
+
+    except Exception as e:
+        print(e)
+    finally:
+        return redirect(request.referrer)    
+
+@app.route('/carts')
+def getCart():
+    if 'Shoppingcart' not in session:
+        return redirect(request.referrer)
+    subtotal = 0
+    grandtotal = 0
+    for key, product in session['Shoppingcart'].items():
+        subtotal += float(product['price']) * int(product['quantity'])
+        grandtotal = subtotal
+    return render_template('carts.html', grandtotal=grandtotal)
+
+# app.route('/updatecart/<int:id>', methods=['POST'])
+# def updatecart(id):
+#     quantity = request.form.get('quantity')
+#     color = request.form.get('color')
+#     if quantity and color and request.method == "POST":
+#         if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
+#             return redirect(url_for('merch'))
+#         else:
+#          session.modified = True
+#          for key, item in session['Shoppingcart'].items():
+#                  if int(key) == id:
+#                      item['color'] = color
+#                      item['quantity'] = quantity
+#                      flash('Item is updated')
+#                      return redirect(url_for('getCart'))
+
+@app.route('/deleteitem/<int:id>')
+def deleteitem(id):
+     if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
+         return redirect(url_for('merch'))
+     else:
+         session.modified = True
+         for key, item in session['Shoppingcart'].items():
+                 if int(key) == id:
+                     session['Shoppingcart'].pop(key, None)
+                     return redirect(url_for('getCart'))
+
+
+@app.route('/clearcart')
+def clearcart():
+        session.pop('Shoppingcart', None)
+        return redirect(url_for('merch'))
+
+# @app.route('/empty')
+# def empty_cart():
+#     try:
+#         session.clear()
+#         return redirect(url_for('merch'))
+#     except Exception as e:
+#         print(e)
 
 
 

@@ -10,6 +10,9 @@
           <b>Account Info</b>
         </div>
         <ul class="list-group list-group-flush">
+          {% if current_user.email == 'jdecee@gmail.com' %}
+          <li class="list-group-item">Role: Admin</li>
+          {% endif %}
           <li class="list-group-item">Username: {{ current_user.username }}</li>
           <li class="list-group-item">Email: {{ current_user.email }}</li>
         </ul>

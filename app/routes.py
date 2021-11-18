@@ -28,6 +28,7 @@ def admin():
         db.session.commit()
 
         flash(f'{name} has been added', 'success')
+        return redirect(url_for('admin'))
     return render_template('admin.html', form=form, products=products, title='admin')
 
 @app.route('/updateproduct/<int:product_id>', methods=['GET', 'POST'])
@@ -52,7 +53,7 @@ def updateproduct(product_id):
 
         db.session.commit() 
         flash(f'Product has been updated')
-        return redirect(url_for('admin'))
+        return redirect(url_for('admin', product_id=product.id))
     return render_template('updateproduct.html', product=product, form=form)
 
 @app.route('/deleteproduct/<int:product_id>/', methods=['GET', 'POST'])

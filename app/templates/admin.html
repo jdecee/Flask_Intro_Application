@@ -13,7 +13,11 @@
             </fieldset>
             <fieldset>
                 {{ form.price.label }}
-                {{ form.price(class='form-control', placeholder='Price') }}
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">$</span>
+                    {{ form.price(class='form-control', placeholder='Price') }}
+                  </div>
+            </span>
             </fieldset>
             <fieldset>
                 {{ form.stock.label }}
@@ -32,7 +36,7 @@
                 {{ form.image(class='form-control', placeholder='Image') }}
             </fieldset>
         </div>
-        {{ form.submit(class='btn btn-success') }}
+        {{ form.submit(class='btn btn-success mt-1') }}
     </form>
 </div>
 
@@ -43,7 +47,6 @@
                 <th>Product</th>
                 <th>Price</th>
                 <th>Image</th>
-                <th>Edit</th>
                 <th>Delete</th>
             </thead>
         <tbody>
@@ -53,7 +56,6 @@
                 <td>{{p.name}}</td>
                 <td>{{p.price}}</td>
                 <td><img src="{{url_for('static', filename='images/' + p.image)}}" alt="{{p.name}}" width="50" height="20"></td>
-                <td><a href="{{url_for('updateproduct', product_id=p.id)}}" class="btn btn-secondary">Edit</td>
                 <td><a href="{{ url_for('deleteproduct', product_id=p.id) }}" method="post" class="btn btn-danger mt-1">Delete</a></td>
             </tr>
             {% endfor %}

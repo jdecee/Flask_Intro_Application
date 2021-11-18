@@ -3,7 +3,11 @@
 {% block content %}
 
 <h1 class='text-center'>Merch</h1>
-
+{% if current_user.is_authenticated %}
+<h3 class='text-center'>Welcome <b>{{current_user.username}}</b>. Enjoy Shopping!</h3>
+{% else %}
+<h4 class='text-center mt-3'>Welcome, please register and login to create a shopping cart :)</h4>
+{% endif %}
 <div class="container">
     <div class="row">
         {% for product in products %}

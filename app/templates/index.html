@@ -1,20 +1,23 @@
 {% extends 'base.html'%} 
 
 {% block content %}
-    <div class='container mt-5 text-center'>
-        <h2>Hi, I'm Jon Dicianni.</h2>
+    <div class='bg-light'>
+    <div class='container pt-5 text-center'>
+        <h2>Hi, I'm <u>Jon Dicianni</u>.</h2>
         <h5>Professional Comedian.
-        <br>Designs are modern and minimalistic.
+        <!-- <br>Designs are modern and minimalistic. -->
         <br>Main source of fuel is Laughter. 
         </h5> 
     </div>
     <div class='mt-5 text-center'>
+        <blockquote>“....maybe fear is God's way of saying, "Pay attention, this could be fun.”<br> - Craig Ferguson</blockquote>
         <h6>Enjoy!</h6>
         <a href="/videos" class="btn btn-lg btn-primary">Go to videos</a>
     </div>  
     <div>
         <div class="container text-center" style="margin-top: 300px">
             <div class="row">
+                <h5>Get in touch!</h5>
                 <div class="col-3-md">
                     <form id="contact" action="">
                         <input type="text" placeholder="First Name">
@@ -22,9 +25,10 @@
                         <input type="text" placeholder="Email Address">
                         <button>✉️</button>
                     </form>
+                    <a href="https://twitter.com/JonDiCianni" target="_blank" class="fa fa-twitter mt-4" style="text-decoration: none;"></a>
                 </div>
             </div>
         </div>
     </div>
-
+</div>    
 {% endblock %}

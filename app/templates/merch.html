@@ -2,14 +2,14 @@
 
 {% block content %}
 
-<h1>Merch</h1>
+<h1 class='text-center'>Merch</h1>
 
 <div class="container">
     <div class="row">
         {% for product in products %}
-        <div class="col-md-3 mt-5">
+        <div class="col-md-4 mt-5">
             <div class="card">
-                <img src="" alt="{{product.name}}">
+                <img src="{{url_for('static', filename='images/' + product.image)}}" alt="{{product.name}}">
                 <div class="card-body">
                     <h5 class='text-center'>{{product.name}}</h5>
                     <p class='text-center'>${{product.price}}</p>

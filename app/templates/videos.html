@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if current_user.is_authenticated %}
-<h1 class='text-center'>Welcome to My Videos <i>{{current_user.username}}</i>. I Hope you Enjoy!</h1>
+<h1 class='text-center'>Welcome to My Videos <b>{{current_user.username}}</b>. Hope you Enjoy!</h1>
 <h3 class='text-center'>Comment Below after Watching!</h3>
 {% else %}
 <h4 class='text-center mt-3'>Welcome, please register to add a post :)</h4>
@@ -18,7 +18,7 @@
 </div>
 ​
 {% for p in posts %}
-    <div class="card bg-primary text-dark">
+    <div class="card bg-light text-dark">
         <div class="card-header">
         {{ p.title }}
         </div>

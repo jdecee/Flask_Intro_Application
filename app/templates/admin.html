@@ -52,7 +52,7 @@
                 <td>{{p.id}}</td>
                 <td>{{p.name}}</td>
                 <td>{{p.price}}</td>
-                <td><img src="{{url_for('static', filename='images' + p.image)}}"></td>
+                <td><img src="{{url_for('static', filename='images/' + p.image)}}" alt="{{p.name}}" width="50" height="20"></td>
                 <td><a href="{{url_for('updateproduct', product_id=p.id)}}" class="btn btn-secondary">Edit</td>
                 <td><a href="{{ url_for('deleteproduct', product_id=p.id) }}" method="post" class="btn btn-danger mt-1">Delete</a></td>
             </tr>

@@ -11,6 +11,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/admin', methods=['GET','POST'])
+@login_required
 def admin():
     form = AddProduct()
     products = Product.query.all()
@@ -113,21 +114,24 @@ def getCart():
         grandtotal = subtotal
     return render_template('carts.html', grandtotal=grandtotal)
 
-# app.route('/updatecart/<int:id>', methods=['POST'])
-# def updatecart(id):
-#     quantity = request.form.get('quantity')
-#     color = request.form.get('color')
-#     if quantity and color and request.method == "POST":
-#         if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
-#             return redirect(url_for('merch'))
-#         else:
-#          session.modified = True
-#          for key, item in session['Shoppingcart'].items():
-#                  if int(key) == id:
-#                      item['color'] = color
-#                      item['quantity'] = quantity
-#                      flash('Item is updated')
-#                      return redirect(url_for('getCart'))
+# app.route('/updatecart/<int:code>', methods=['POST'])
+# def updatecart(code):
+#     if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
+#         return redirect(url_for('home'))
+#     if request.method =="POST":
+#         quantity = request.form.get('quantity')
+#         color = request.form.get('color')
+#         try:
+#             session.modified = True
+#             for key , item in session['Shoppingcart'].items():
+#                 if int(key) == code:
+#                     item['quantity'] = quantity
+#                     item['color'] = color
+#                     flash('Item is updated!')
+#                     return redirect(url_for('getCart'))
+#         except Exception as e:
+#             print(e)
+#             return redirect(url_for('getCart'))
 
 @app.route('/deleteitem/<int:id>')
 def deleteitem(id):
